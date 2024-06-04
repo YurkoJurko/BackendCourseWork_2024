@@ -2,7 +2,9 @@
 
 namespace controllers;
 
-class UsersController
+use core\Controller;
+
+class UsersController extends Controller
 {
     public function actionIndex()
     {
