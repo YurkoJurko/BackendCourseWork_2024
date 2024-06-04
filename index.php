@@ -12,3 +12,4 @@ $route = isset($_GET['route']) ? $_GET['route'] : '';
 
 $router = new core\Router($route);
 $router->run();
+$router->finish();
