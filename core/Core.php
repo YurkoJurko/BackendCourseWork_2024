@@ -4,7 +4,7 @@ namespace core;
 
 class Core
 {
-    public $defaultLayoutPath = 'views\layouts\index.php';
+    public $defaultLayoutPath = 'views/layouts/index.php';
     public $moduleName;
     public $actionName;
     public $router;
@@ -14,6 +14,13 @@ class Core
 
     private function __construct()
     {
+        if ($handle = opendir('config')) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    echo "$entry\n";
+                }
+            }
+        }
         $this->template = new Template($this->defaultLayoutPath);
     }
 
