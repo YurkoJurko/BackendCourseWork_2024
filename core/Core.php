@@ -28,7 +28,9 @@ class Core
     {
         $this->router = new \core\Router($route);
         $params = $this->router->run();
-        $this->template->setParams($params);
+        if (!empty($params)) {
+            $this->template->setParams($params);
+        }
     }
 
     public function finish()
