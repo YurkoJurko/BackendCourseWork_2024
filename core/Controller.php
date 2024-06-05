@@ -12,8 +12,9 @@ class Controller
         $path = "views/{$module}/{$action}.php";
         $this->template = new Template($path);
     }
-    public function render()
+    public function render($pathToView)
     {
+        $this->template->setTemplatePath($pathToView);
         return[
             'Content' => $this->template->getHTML()
         ];

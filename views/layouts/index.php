@@ -4,6 +4,10 @@
 if (empty($Title)) {
     $Title = '';
 }
+if (empty($Content))
+{
+    $Content = "";
+}
 ?>
 
 

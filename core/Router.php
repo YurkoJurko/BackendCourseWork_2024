@@ -32,7 +32,10 @@ class Router
             if (method_exists($controller, $method)) {
                 array_splice($parts, 0, 2);
                 return $controllerObject->$method($parts);
-            } else $this->error(404);
+            } else {
+                $this->error(404);
+                $controllerObject->actionIndex();
+            }
         } else $this->error(404);
         // return
     }

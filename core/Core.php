@@ -11,22 +11,17 @@ class Core
     public $template;
     public $db;
     private static $instance;
+    public $session;
 
     private function __construct()
     {
-        if ($handle = opendir('config')) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                    echo "$entry\n";
-                }
-            }
-        }
         $this->template = new Template($this->defaultLayoutPath);
 
         $login = Config::get()->dbAdminLogin;
         $password = Config::get()->dbAdminPassword;
-
         $this->db = new Database($login, $password);
+        $this->session = new Session();
+        session_start();
     }
 
     public function run($route)
