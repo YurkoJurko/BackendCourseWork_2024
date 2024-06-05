@@ -7,9 +7,6 @@ $Config[] = [
     'dbAdminLogin' => 'ossAdmin',
     'dbAdminPassword' => 'vad7Mu9N7*o[OR9A',
 
-    'dbModeratorLogin' => 'ossModerator',
-    'dbModeratorPassword' => 'b@wVoaQZPwQ!M.e]',
-
     'dbUserLogin' => 'ossUser',
     'dbUserPassword' => '[gLgSVeoH1)_m7kP',
 

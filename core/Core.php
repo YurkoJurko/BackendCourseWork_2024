@@ -9,7 +9,7 @@ class Core
     public $actionName;
     public $router;
     public $template;
-    public $Title;
+    public $db;
     private static $instance;
 
     private function __construct()
@@ -22,6 +22,11 @@ class Core
             }
         }
         $this->template = new Template($this->defaultLayoutPath);
+
+        $login = Config::get()->dbAdminLogin;
+        $password = Config::get()->dbAdminPassword;
+
+        $this->db = new Database($login, $password);
     }
 
     public function run($route)
