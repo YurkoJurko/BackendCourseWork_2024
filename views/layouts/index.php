@@ -59,7 +59,7 @@ if (empty($Content))
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
                     </ul>
                 </div>
             </div>
