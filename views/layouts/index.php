@@ -1,15 +1,23 @@
 <?php
 /** @var string $Title */
 /** @var string $Content */
+/** @var string $Username */
+/** @var string $picture */
+
+
 if (empty($Title)) {
     $Title = '';
 }
-if (empty($Content))
-{
+if (empty($Content)) {
     $Content = "";
 }
-?>
+if (empty($Username)) {
+    $Username = "Гість";
+}
 
+$loginState = \models\Users::isUserLogged();
+
+?>
 
 <!doctype html>
 <html lang="en">
@@ -37,29 +45,31 @@ if (empty($Content))
                 </a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
-                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Inventory</a></li>
-                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Customers</a></li>
-                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Products</a></li>
+                    <li><a href="/site/index" class="nav-link px-2 link-secondary">Головна сторінка</a></li>
                 </ul>
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+                    <input type="search" class="form-control" placeholder="Пошук..." aria-label="Search">
                 </form>
 
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                        <img src="" alt="User Picture" width="32" height="32" class="rounded-circle">
                     </a>
+                    <p> <?= $Username ?> </p>
                     <ul class="dropdown-menu text-small" style="">
-                        <li><a class="dropdown-item" href="#">New project...</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="/users/view">Сторінка профілю</a></li>
+                        <?php if (!$loginState): ?>
+                            <li><a class="dropdown-item" href="/users/login">Увійти</a></li>
+                            <li><a class="dropdown-item" href="/users/register">Зареєструватись</a></li>
+                        <?php endif; ?>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/users/logout">Logout</a></li>
+                        <?php if ($loginState): ?>
+                            <li><a class="dropdown-item" href="/users/logout">Вийти з акаунту</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
@@ -74,31 +84,8 @@ if (empty($Content))
 <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <div class="col-md-4 d-flex align-items-center">
-            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-                <svg class="bi" width="30" height="24">
-                    <use xlink:href="#bootstrap"></use>
-                </svg>
-            </a>
-            <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Company, Inc</span>
+            <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Ihnatyuck Yurii</span>
         </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3"><a class="text-body-secondary" href="#">
-                    <svg class="bi" width="24" height="24">
-                        <use xlink:href="#twitter"></use>
-                    </svg>
-                </a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#">
-                    <svg class="bi" width="24" height="24">
-                        <use xlink:href="#instagram"></use>
-                    </svg>
-                </a></li>
-            <li class="ms-3"><a class="text-body-secondary" href="#">
-                    <svg class="bi" width="24" height="24">
-                        <use xlink:href="#facebook"></use>
-                    </svg>
-                </a></li>
-        </ul>
     </footer>
 </div>
 </body>

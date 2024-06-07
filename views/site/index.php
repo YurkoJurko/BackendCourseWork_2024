@@ -1,5 +1,7 @@
 <?php
-$this->Title = 'Голловна сторінка';
+$this->Title = 'Головна сторінка';
 ?>
 
-<h1>site index</h1>
+<div style="width: 90%">
+    <h1>site index</h1>
+</div>

@@ -7,6 +7,7 @@ use function MongoDB\BSON\toJSON;
 class Controller
 {
     protected $template;
+    protected $errorMessages;
     public $isPost = false;
     public $isGet = false;
     public $post;
@@ -29,6 +30,7 @@ class Controller
         }
         $this->post = new Post();
         $this->get = new Get();
+        $this->errorMessages = [];
     }
 
     public function render($pathToView = null)
@@ -45,4 +47,23 @@ class Controller
         header("Location: {$path}");
         die;
     }
+
+    public function addErrorMessage($message)
+    {
+        $this->errorMessages[] = $message;
+        $this->template->setParam('errorMessage', implode('<br/>', $this->errorMessages));
+    }
+
+    public function clearErrorMessages()
+    {
+        var_dump($this->errorMessages);
+        $this->errorMessages = [];
+        $this->template->setParam('errorMessage', null);
+    }
+
+    public function areErrorMMessagesExist()
+    {
+        return count($this->errorMessages) > 0;
+    }
+
 }

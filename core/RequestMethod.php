@@ -12,7 +12,12 @@ class RequestMethod
     }
     public function __get($key)
     {
-        return $this->array[$key];
+        if(isset($this->array[$key])){
+            return $this->array[$key];
+        }
+        else{
+            return null;
+        }
     }
 
     public function getAll()

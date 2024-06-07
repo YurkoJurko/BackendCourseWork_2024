@@ -4,8 +4,8 @@ $this->Title = 'Вхід на сайт';
 ?>
 
 
-<h1>LoginPage</h1>
-<div style="margin-top: 3%; margin-left: 30%; margin-right: 30%">
+<div class="mt-3 mx-auto p-3 border border-dark rounded shadow-sm" style="width: 40%;">
+    <h1>LoginPage</h1>
     <?php if(!empty($errorMessage)) : ?>
         <div class="alert alert-danger" role="alert">
             <?=$errorMessage?>

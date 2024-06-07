@@ -4,6 +4,7 @@ namespace models;
 
 use core\Core;
 use core\Model;
+use Couchbase\User;
 
 /**
  * @property  int $id ;
@@ -21,23 +22,33 @@ class Users extends Model
 
     public static function loginVerification($login, $password)
     {
-        $isEmail = false;
-
-        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-            $domain = substr($login, strpos($login, '@') + 1);
-            $isEmail = ($domain === 'student.ztu.edu.ua' || $domain === 'ztu.edu.ua');
-        }
+        $isEmail = filter_var($login, FILTER_VALIDATE_EMAIL);
 
         $searchCriteria = $isEmail ? ['email' => $login, 'password' => $password] : ['login' => $login, 'password' => $password];
         $rows = self::findByCondition($searchCriteria);
 
-        if(!empty($rows))
+        if (!empty($rows)) {
             return $rows[0];
-        else{
+        } else {
             $searchCriteria = $isEmail ? ['email' => $login] : ['login' => $login];
             $rows = self::findByCondition($searchCriteria);
             return !empty($rows) ? 'Не правильно введений пароль' : 'Користувача з такими даними не знайдено';
         }
+    }
+
+    public static function registerUser($username, $login, $email, $password, $profilePictureID = null)
+    {
+        $user = new Users();
+        $user->username = $username;
+        $user->login = $login;
+        $user->email = $email;
+        $user->password = $username;
+        $user->registrationDate = date('Y-m-d');
+        if (!is_null($profilePictureID))
+            $user->profilePictureID = $profilePictureID;
+        else $username->profilePictureID = 1;
+
+        $user->save();
     }
 
     public static function isUserLogged()

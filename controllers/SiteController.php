@@ -3,7 +3,9 @@
 namespace controllers;
 
 use core\Controller;
+use core\Model;
 use core\Template;
+use models\Users;
 
 class SiteController extends Controller
 {

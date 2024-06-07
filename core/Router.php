@@ -23,12 +23,15 @@ class Router
 
         \core\Core::get()->moduleName = $parts[0];
         \core\Core::get()->actionName = $parts[1];
-
+        if (isset($parts[2])) {
+            \core\Core::get()->id = $parts[2];
+        }
         $controller = 'controllers\\' . ucfirst($parts[0]) . 'Controller';
         $method = 'action' . ucfirst($parts[1]);
 
         if (class_exists($controller)) {
             $controllerObject = new $controller();
+            Core::get()->controllerObject = $controllerObject;
             if (method_exists($controller, $method)) {
                 array_splice($parts, 0, 2);
                 return $controllerObject->$method($parts);
@@ -37,13 +40,8 @@ class Router
                 $controllerObject->actionIndex();
             }
         } else $this->error(404);
-        // return
     }
 
-    public function finish()
-    {
-
-    }
 
     public function error($code)
     {
