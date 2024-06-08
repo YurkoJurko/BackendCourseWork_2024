@@ -125,6 +125,32 @@ class Database
         }
     }
 
+    public function count($table, $where = null)
+    {
+        try {
+            $sql = "SELECT COUNT(*) as count FROM {$table}";
+            $params = [];
+
+            if ($where) {
+                $where_string = $this->where($where);
+                $sql .= " WHERE {$where_string}";
+                $params = $where;
+            }
+
+            $sth = $this->pdo->prepare($sql);
+
+            foreach ($params as $key => $value) {
+                $sth->bindValue(":{$key}", $value);
+            }
+
+            $sth->execute();
+            return (int) $sth->fetchColumn();
+        } catch (\PDOException $e) {
+            throw new \Exception("Database Query Error: " . $e->getMessage());
+        }
+    }
+
+
     protected function where($where)
     {
         if (is_array($where)) {
@@ -150,4 +176,5 @@ class Database
             return "*";
         }
     }
+
 }

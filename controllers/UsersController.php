@@ -58,7 +58,7 @@ class UsersController extends Controller
             }
 
             if (!$this->areErrorMMessagesExist()) {
-                Users::registerUser($this->post->username, $this->post->login, $this->post->email, $this->post->password1, 1);
+                Users::registerUser($this->post->username, $this->post->login, $this->post->email, $this->post->password1);
 
                 $user = Users::loginVerification($this->post->login, $this->post->password1);
                 if (is_object($user)) {
@@ -76,17 +76,24 @@ class UsersController extends Controller
         return $this->render();
     }
 
+    public function actionEdit()
+    {
 
-    public
-    function actionLogout()
+    }
+
+    public function actionLogout()
     {
         Users::logoutUser();
         $this->redirect('/users/login');
     }
 
-    public
-    function actionIndex()
+    public function actionIndex()
     {
         return $this->redirect("/users/login");
+    }
+
+    public function actionView()
+    {
+        return $this->render();
     }
 }

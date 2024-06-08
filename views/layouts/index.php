@@ -3,10 +3,7 @@
 /** @var string $Content */
 /** @var string $picture */
 
-
-$user = \core\Core::get()->session->get('user');
-
-var_dump($user);
+$user = \core\Core::get()->session->get('user') ?? null;
 
 if (empty($Title)) {
     $Title = '';
@@ -21,21 +18,18 @@ else
 
 $loginState = \models\Users::isUserLogged();
 
+
 ?>
 
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <title> <?= $Title ?>  </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title><?= $Title ?></title>
 </head>
 <body>
 <div>
@@ -52,16 +46,28 @@ $loginState = \models\Users::isUserLogged();
                     <li><a href="/site/index" class="nav-link px-2 link-secondary">Головна сторінка</a></li>
                 </ul>
 
+                <?php if (!empty($user->role)): ?>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/news/add" class="nav-link px-2 link-secondary">Додати новину</a></li>
+                    </ul>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/news/moderationList" class="nav-link px-2 link-secondary">Черга новин</a></li>
+                    </ul>
+                <?php endif; ?>
+
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input type="search" class="form-control" placeholder="Пошук..." aria-label="Search">
+                    <div class="d-flex">
+                        <input type="search" class="form-control me-2" placeholder="Пошук..." aria-label="Search">
+                        <button type="submit" class="btn btn-primary">Пошук</button>
+                    </div>
                 </form>
 
                 <div class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="" alt="User Picture" width="32" height="32" class="rounded-circle">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?= \models\Users::outputProfilePicture($user) . " class='additional-class rounded-circle' style='width: 50px; height: 50px;'" ?>
+
                     </a>
-                    <p> <?= $Username ?> </p>
+                    <p><?= $Username ?></p>
                     <ul class="dropdown-menu text-small" style="">
                         <?php if ($loginState): ?>
                             <li><a class="dropdown-item" href="/users/view">Сторінка профілю</a></li>

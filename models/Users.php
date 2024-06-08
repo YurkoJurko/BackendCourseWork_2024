@@ -57,9 +57,28 @@ class Users extends Model
         return $user;
     }
 
-    public static function savePicture($picture)
+    public static function outputProfilePicture($user)
     {
+        $output = '';
 
+        if (is_null($user) || (is_object($user) && is_null($user->profilePictureID)) || (is_array($user) && !isset($user['profilePictureID']))) {
+            $pictureID = 1;
+        } else {
+            $pictureID = is_object($user) ? $user->profilePictureID : $user['profilePictureID'];
+        }
+
+        $picture = \models\Pictures::findPictureByID($pictureID);
+
+        if ($picture && isset($picture['picture']) && isset($picture['type'])) {
+            $imageData = $picture['picture'];
+            $base64Image = base64_encode($imageData);
+            $imageMimeType = $picture['type'];
+
+            $output .= "<img src='data:$imageMimeType;base64,$base64Image' alt='ProfilePicture'";
+            return $output;
+        }
+
+        return $output;
     }
 
     public static function isUserLogged()
