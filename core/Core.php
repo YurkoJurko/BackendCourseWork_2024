@@ -7,11 +7,10 @@ class Core
     public $defaultLayoutPath = 'views/layouts/index.php';
     public $moduleName;
     public $actionName;
-    public $redirectId;
     public $router;
     public $template;
     public $db;
-    public $id;
+    public $additionalParam;
     public Controller $controllerObject;
     private static $instance;
     public $session;

@@ -24,15 +24,19 @@ class Users extends Model
     {
         $isEmail = filter_var($login, FILTER_VALIDATE_EMAIL);
 
-        $searchCriteria = $isEmail ? ['email' => $login, 'password' => $password] : ['login' => $login, 'password' => $password];
+        $searchCriteria = $isEmail ? ['email' => $login] : ['login' => $login];
         $rows = self::findByCondition($searchCriteria);
 
         if (!empty($rows)) {
-            return $rows[0];
+            $user = is_object($rows[0]) ? $rows[0] : (object) $rows[0];
+
+            if (isset($user->password) && password_verify($password, $user->password)) {
+                return $user;
+            } else {
+                return 'Не правильно введений пароль';
+            }
         } else {
-            $searchCriteria = $isEmail ? ['email' => $login] : ['login' => $login];
-            $rows = self::findByCondition($searchCriteria);
-            return !empty($rows) ? 'Не правильно введений пароль' : 'Користувача з такими даними не знайдено';
+            return 'Користувача з такими даними не знайдено';
         }
     }
 
@@ -42,13 +46,20 @@ class Users extends Model
         $user->username = $username;
         $user->login = $login;
         $user->email = $email;
-        $user->password = $username;
+        $user->password = password_hash($password, PASSWORD_DEFAULT);
         $user->registrationDate = date('Y-m-d');
         if (!is_null($profilePictureID))
             $user->profilePictureID = $profilePictureID;
         else $username->profilePictureID = 1;
 
         $user->save();
+
+        return $user;
+    }
+
+    public static function savePicture($picture)
+    {
+
     }
 
     public static function isUserLogged()

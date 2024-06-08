@@ -1,9 +1,12 @@
 <?php
 /** @var string $Title */
 /** @var string $Content */
-/** @var string $Username */
 /** @var string $picture */
 
+
+$user = \core\Core::get()->session->get('user');
+
+var_dump($user);
 
 if (empty($Title)) {
     $Title = '';
@@ -11,9 +14,10 @@ if (empty($Title)) {
 if (empty($Content)) {
     $Content = "";
 }
-if (empty($Username)) {
+if (!isset($user->username))
     $Username = "Гість";
-}
+else
+    $Username = $user->username;
 
 $loginState = \models\Users::isUserLogged();
 
@@ -59,7 +63,10 @@ $loginState = \models\Users::isUserLogged();
                     </a>
                     <p> <?= $Username ?> </p>
                     <ul class="dropdown-menu text-small" style="">
-                        <li><a class="dropdown-item" href="/users/view">Сторінка профілю</a></li>
+                        <?php if ($loginState): ?>
+                            <li><a class="dropdown-item" href="/users/view">Сторінка профілю</a></li>
+                        <?php endif; ?>
+
                         <?php if (!$loginState): ?>
                             <li><a class="dropdown-item" href="/users/login">Увійти</a></li>
                             <li><a class="dropdown-item" href="/users/register">Зареєструватись</a></li>

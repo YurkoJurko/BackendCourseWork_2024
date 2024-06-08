@@ -14,7 +14,7 @@ $this->Title = 'Вхід на сайт';
     <form method="post" action="">
         <div class="mb-3">
             <label for="emailInput" class="form-label">Логін чи email</label>
-            <input type="email" name="login" class="form-control" id="emailInput" aria-describedby="emailHelp">
+            <input type="text" name="login" class="form-control" id="emailInput" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
             <label for="passwordInput" class="form-label">Пароль</label>

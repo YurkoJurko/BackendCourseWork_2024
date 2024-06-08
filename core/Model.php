@@ -18,8 +18,16 @@ class Model
 
     public function save()
     {
-        $temp = $this->{self::$primaryKey};
-        if (empty($temp)) {
+        $isInsert = false;
+        if (!isset($this->{static::$primaryKey}))
+            $isInsert = true;
+        else {
+            $temp = $this->{static::$primaryKey};
+            if (empty($temp))
+                $isInsert = true;
+        }
+
+        if (!isset($this->{static::$primaryKey}) || empty($temp)) {
             Core::get()->db->insert(static::$tableName, $this->fieldsArray);
         } else {
             Core::get()->db->update(static::$tableName, $this->fieldsArray, [static::$primaryKey => $this->{static::$primaryKey}]);
