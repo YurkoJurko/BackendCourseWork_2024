@@ -2,14 +2,11 @@
 
 namespace core;
 
-use http\Params;
-
 class Model
 {
     protected $fieldsArray;
     protected static $primaryKey = 'id';
     protected static $tableName = '';
-
 
     public function __construct()
     {
@@ -18,15 +15,7 @@ class Model
 
     public function save()
     {
-        $isInsert = false;
-        if (!isset($this->{static::$primaryKey}))
-            $isInsert = true;
-        else {
-            $temp = $this->{static::$primaryKey};
-            if (empty($temp))
-                $isInsert = true;
-        }
-
+        $temp = $this->{static::$primaryKey};
         if (!isset($this->{static::$primaryKey}) || empty($temp)) {
             Core::get()->db->insert(static::$tableName, $this->fieldsArray);
         } else {
@@ -47,17 +36,21 @@ class Model
     public static function findByID($id)
     {
         $arr = Core::get()->db->select(static::$tableName, '*', [static::$primaryKey => $id]);
-        if (count($arr) > 0)
+        if (count($arr) > 0) {
             return $arr[0];
-        else return null;
+        } else {
+            return null;
+        }
     }
 
     public static function findByCondition($conditionAssocArray)
     {
         $arr = Core::get()->db->select(static::$tableName, '*', $conditionAssocArray);
-        if (count($arr) > 0)
+        if (count($arr) > 0) {
             return $arr;
-        else return null;
+        } else {
+            return null;
+        }
     }
 
     public function __set($key, $value)

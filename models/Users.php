@@ -28,7 +28,7 @@ class Users extends Model
         $rows = self::findByCondition($searchCriteria);
 
         if (!empty($rows)) {
-            $user = is_object($rows[0]) ? $rows[0] : (object) $rows[0];
+            $user = is_object($rows[0]) ? $rows[0] : (object)$rows[0];
 
             if (isset($user->password) && password_verify($password, $user->password)) {
                 return $user;
@@ -50,7 +50,7 @@ class Users extends Model
         $user->registrationDate = date('Y-m-d');
         if (!is_null($profilePictureID))
             $user->profilePictureID = $profilePictureID;
-        else $username->profilePictureID = 1;
+        else $user->profilePictureID = 1;
 
         $user->save();
 
@@ -94,5 +94,14 @@ class Users extends Model
     public static function logoutUser()
     {
         Core::get()->session->remove('user');
+    }
+
+    public static function updateUser($user)
+    {
+        Core::get()->db->update('users', [
+            'username' => $user->username,
+            'login' => $user->login,
+            'password' => $user->password
+        ], ['id' => $user->id]);
     }
 }

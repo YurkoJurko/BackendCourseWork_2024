@@ -56,7 +56,6 @@ class Controller
 
     public function clearErrorMessages()
     {
-        var_dump($this->errorMessages);
         $this->errorMessages = [];
         $this->template->setParam('errorMessage', null);
     }

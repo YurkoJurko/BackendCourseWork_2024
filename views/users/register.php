@@ -1,7 +1,6 @@
 <?php
 $this->Title = 'Реєстрація на сайт';
 
-
 $post = $this->controller->post->getAll();
 ?>
 
@@ -14,18 +13,18 @@ $post = $this->controller->post->getAll();
             <?=$errorMessage?>
         </div>
     <?php endif; ?>
-    <form method="post" action="">
+    <form method="post" action="" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="usernameInput" class="form-label">Введіть ім'я користувача</label>
-            <input value="<?= $this->controller->post->login ?>" type="text" name="username" class="form-control" placeholder="Ім'я яке відображатиметься на сайті" required id="usernameInput" aria-describedby="usernameHelp">
+            <input value="<?= $this->controller->post->username ?>" type="text" name="username" class="form-control" placeholder="Ім'я яке відображатиметься на сайті" required id="usernameInput" aria-describedby="usernameHelp">
         </div>
         <div class="mb-3">
             <label for="emailInput" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" placeholder="@ztu.edu.ua" required id="emailInput" aria-describedby="emailHelp">
+            <input value="<?= $this->controller->post->email ?>" type="email" name="email" class="form-control" placeholder="@ztu.edu.ua" required id="emailInput" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
             <label for="loginInput" class="form-label">Логін</label>
-            <input type="text" name="login" class="form-control" required id="loginInput" aria-describedby="loginHelp">
+            <input value="<?= $this->controller->post->login?>" type="text" name="login" class="form-control" required id="loginInput" aria-describedby="loginHelp">
         </div>
         <div class="mb-3">
             <label for="passwordInput1" class="form-label">Пароль</label>
@@ -35,11 +34,7 @@ $post = $this->controller->post->getAll();
             <label for="passwordInput2" class="form-label">Повторіть пароль</label>
             <input type="password" name="password2" class="form-control" required id="passwordInput2">
         </div>
-        <div class="mb-3">
-            <label for="photoInput" class="form-label">Фото</label>
-            <input type="file" name="photo" class="form-control" id="photoInput" aria-describedby="photoHelp">
-            <div id="photoHelp" class="form-text">Будь ласка, завантажте ваше фото. У противному випадку, буде застосовано стандартне фото</div>
-        </div>
+        Фото можна встановити на сторінці профілю
         <hr>
         <button type="submit" class="btn btn-primary">Створити акаунт</button>
     </form>

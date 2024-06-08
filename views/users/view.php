@@ -1,7 +1,15 @@
 <?php
-$userID = \core\Core::get()->additionalParam;
+if (is_null(\core\Core::get()->additionalParam)) {
+    $objUser = \core\Core::get()->session->get('user');
+    foreach ($objUser as $key => $value) {
+        $user[$key] = $value;
+    }
+    $userID = $user['id'];
+} else {
+    $userID = \core\Core::get()->additionalParam;
+    $user = \models\Users::findByID($userID);
+}
 
-$user = \models\Users::findByID($userID);
 $commentCount = \core\Core::get()->db->count('comments', ['userID' => $userID]);
 $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
 ?>
@@ -12,7 +20,8 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
@@ -33,13 +42,17 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
                 <div class="card">
                     <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
                         <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <?= \models\Users::outputProfilePicture($user) . " class='additional-class' style='width: 100px; height: 100px;'" ?>
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                            <?= \models\Users::outputProfilePicture($user) . " class='img-fluid img-thumbnail mt-4 mb-2' style='width: 150px; z-index: 1'" ?>
+                            <br>
+                            <?php if($userID === \core\Core::get()->session->get('user')->id):?>
+                            <a href="/users/edit" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark"
+                               style="z-index: 1;">
                                 Edit profile
-                            </button>
+                            </a>
+                            <?php endif; ?>
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">
-                            <h5> <?= $user['username'] ?></h5>
+                            <h5><?= $user['username'] ?></h5>
                         </div>
                     </div>
                     <div class="p-4 text-black bg-body-tertiary">

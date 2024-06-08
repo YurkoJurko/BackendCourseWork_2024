@@ -63,11 +63,10 @@ $loginState = \models\Users::isUserLogged();
                 </form>
 
                 <div class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle d-flex flex-column align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                         <?= \models\Users::outputProfilePicture($user) . " class='additional-class rounded-circle' style='width: 50px; height: 50px;'" ?>
-
-                    </a>
                     <p><?= $Username ?></p>
+                    </a>
                     <ul class="dropdown-menu text-small" style="">
                         <?php if ($loginState): ?>
                             <li><a class="dropdown-item" href="/users/view">Сторінка профілю</a></li>
