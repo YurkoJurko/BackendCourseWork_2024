@@ -55,9 +55,10 @@ class Pictures extends Model
         return $pictureId;
     }
 
-    public static function saveMultiplePictures($files, $newsId)
+    public static function saveMultiplePictures($files, $newsId = null)
     {
-        foreach ($files as $file) {
+        foreach (array_slice($files, 0, -1) as $file) {
+            var_dump($file);
             $pictureId = self::savePicture($file, $newsId);
         }
     }

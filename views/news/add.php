@@ -15,6 +15,11 @@ if(\core\Core::get()->session->get('user')->role !== "admin" && \core\Core::get(
         border-radius: 8px;
         background: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <?php if(!empty($errorMessage)) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?=$errorMessage?>
+            </div>
+        <?php endif; ?>
         <h1>Додавання новини</h1>
         <form action="" method="POST" enctype="multipart/form-data" id="newsForm">
             <div class="mb-3">

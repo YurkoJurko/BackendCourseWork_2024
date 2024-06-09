@@ -13,7 +13,6 @@ class NewsController extends Controller
 {
     public function actionAdd()
     {
-
         $db = Core::get()->db;
         if ($this->isPost) {
             $this->clearErrorMessages();
@@ -37,22 +36,13 @@ class NewsController extends Controller
                 'postedBy' => $postedBy,
             ];
             $newsId = $db->insert('news', $newsData);
+            $filesArray = $this->files->pictures;
 
-            if (!empty($this->files->pictures)) {
-
-                $pictures = $this->files->pictures;
-                foreach ($pictures['name'] as $key => $name) {
-                    $file = [
-                        'name' => $pictures['name'][$key],
-                        'type' => $pictures['type'][$key],
-                        'tmp_name' => $pictures['tmp_name'][$key],
-                        'error' => $pictures['error'][$key],
-                        'size' => $pictures['size'][$key],
-                    ];
-                    Pictures::savePicture($file, $newsId);
-                }
+            if (!empty($filesArray)) {
+                $files = $this->separateFiles($filesArray);
+                Pictures::saveMultiplePictures($files, $newsId);
             }
-            // $this->redirect('/news/view/' . $newsId);
+            $this->redirect('/news/view/' . $newsId);
         } else {
             return $this->render();
         }
@@ -70,4 +60,26 @@ class NewsController extends Controller
     {
         return $this->render();
     }
+
+
+    function separateFiles($files) {
+        $numFiles = count($files['name']);
+        $separatedFiles = array();
+
+        for ($i = 0; $i < $numFiles; $i++) {
+            $file = array(
+                'name' => $files['name'][$i],
+                'full_path' => $files['full_path'][$i],
+                'type' => $files['type'][$i],
+                'tmp_name' => $files['tmp_name'][$i],
+                'error' => $files['error'][$i],
+                'size' => $files['size'][$i]
+            );
+
+            $separatedFiles[] = $file;
+        }
+
+        return $separatedFiles;
+    }
+
 }
