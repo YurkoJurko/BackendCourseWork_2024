@@ -12,6 +12,7 @@ class Controller
     public $isGet = false;
     public $post;
     public $get;
+    public $files;
 
     public function __construct()
     {
@@ -30,6 +31,7 @@ class Controller
         }
         $this->post = new Post();
         $this->get = new Get();
+        $this->files = new Files();
         $this->errorMessages = [];
     }
 

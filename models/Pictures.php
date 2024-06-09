@@ -33,6 +33,7 @@ class Pictures extends Model
         }
 
         $fileContent = file_get_contents($file['tmp_name']);
+
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
         finfo_close($finfo);
@@ -42,11 +43,6 @@ class Pictures extends Model
             throw new Exception('Unsupported file type.');
         }
 
-        $existingPicture = self::findPictureByContent($fileContent);
-        if ($existingPicture) {
-            return $existingPicture['id'];
-        }
-
         $pictureData = [
             'picture' => $fileContent,
             'newsId' => $newsId,
@@ -54,7 +50,7 @@ class Pictures extends Model
         ];
 
         $db = Core::get()->db;
-        $pictureId = $db->insert(self::$tableName, $pictureData);
+        $pictureId = $db->insert('pictures', $pictureData);
 
         return $pictureId;
     }
@@ -81,12 +77,4 @@ class Pictures extends Model
         return $mimeTypeMap[$mimeType] ?? null;
     }
 
-    private static function findPictureByContent($fileContent)
-    {
-        $db = Core::get()->db;
-        $params = [':picture' => $fileContent];
-        $result = $db->select(self::$tableName, '*', $params);
-
-        return $result ? $result[0] : null;
-    }
 }

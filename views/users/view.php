@@ -72,11 +72,13 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
                             <p class="lead fw-normal mb-1">Recent comments</p>
                             <!-- Add your recent comments section content here -->
                         </div>
+                        <?php if ($user['role'] === 'admin' || $user['role'] === 'moderator'): ?>
                         <div class="d-flex justify-content-between align-items-center mb-4 text-body">
                             <p class="lead fw-normal mb-0">Recent news</p>
                             <!-- Add your recent news section content here -->
                             <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

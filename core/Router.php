@@ -18,8 +18,9 @@ class Router
             $parts[0] = 'Site';
             $parts[1] = 'Index';
         }
-        if (count($parts) == 1)
+        if (count($parts) == 1) {
             $parts[1] = 'Index';
+        }
 
         \core\Core::get()->moduleName = $parts[0];
         \core\Core::get()->actionName = $parts[1];
@@ -36,16 +37,17 @@ class Router
                 array_splice($parts, 0, 2);
                 return $controllerObject->$method($parts);
             } else {
-                $this->error(404);
-                $controllerObject->actionIndex();
+                $this->redirectToErrorPage();
             }
-        } else $this->error(404);
+        } else {
+            $this->redirectToErrorPage();
+        }
     }
 
-
-    public function error($code)
+    protected function redirectToErrorPage()
     {
-        http_response_code($code);
-        echo $code;
+        http_response_code(404);
+        include 'views/layouts/error.php';
+        exit;
     }
 }

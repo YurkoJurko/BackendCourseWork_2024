@@ -101,6 +101,7 @@ class Users extends Model
         Core::get()->db->update('users', [
             'username' => $user->username,
             'login' => $user->login,
+            'profilePictureID' => $user->profilePictureID,
             'password' => $user->password
         ], ['id' => $user->id]);
     }

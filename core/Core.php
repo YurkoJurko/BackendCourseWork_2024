@@ -23,6 +23,7 @@ class Core
         $password = Config::get()->dbAdminPassword;
         $this->db = new Database($login, $password);
         $this->session = new Session();
+
         session_start();
     }
 

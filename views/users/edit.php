@@ -1,7 +1,5 @@
 <?php
 $user = \core\Core::get()->session->get('user');
-
-var_dump(\core\Core::get()->session->get('user'));
 ?>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"

@@ -80,7 +80,7 @@ class UsersController extends Controller
             if ($this->isPost) {
                 if (isset($_POST['action'])) {
                     $this->clearErrorMessages();
-                    $user = \core\Core::get()->session->get('user');
+                    $user = Core::get()->session->get('user');
                     $action = $_POST['action'];
                     if ($action === 'update_profile') {
                         $username = $this->post->username;
@@ -88,6 +88,17 @@ class UsersController extends Controller
 
                         $user->username = $username;
                         $user->login = $login;
+
+
+                        if (!is_null($this->files->profilePicture && $this->files->profilePicture['error'] === UPLOAD_ERR_OK)) {
+                            try {
+                                $profilePictureID = Pictures::savePicture($this->files->profilePicture);
+                                $user->profilePictureID = $profilePictureID;
+                            } catch (Exception $e) {
+                                $this->addErrorMessage("Не вдалося завантажити фото профілю: " . $e->getMessage());
+                            }
+                        }
+
                         Users::updateUser($user);
                         $this->redirect('/users/view');
                     } else {
@@ -97,12 +108,12 @@ class UsersController extends Controller
                         $newPas1 = $this->post->newPas1;
                         $newPas2 = $this->post->newPas2;
 
-                        if(!password_verify($currentPas, $password))
+                        if (!password_verify($currentPas, $password))
                             $this->addErrorMessage("Введено не вірний пароль");
                         if ($newPas1 !== $newPas2)
                             $this->addErrorMessage("Нові паролі не співпадають");
 
-                        if(!$this->areErrorMMessagesExist()){
+                        if (!$this->areErrorMMessagesExist()) {
                             $user->password = password_hash($newPas2, PASSWORD_DEFAULT);
                             Users::updateUser($user);
                             $this->redirect('/users/view');
@@ -115,7 +126,9 @@ class UsersController extends Controller
             } else {
                 return $this->render();
             }
-        } else return $this->redirect('/users/login');
+        } else {
+            return $this->redirect('/users/login');
+        }
     }
 
 
@@ -132,6 +145,9 @@ class UsersController extends Controller
 
     public function actionView()
     {
+        if(is_null(Users::findByID(Core::get()->additionalParam))){
+            $this->actionIndex();
+        }
         return $this->render();
     }
 }
