@@ -55,6 +55,13 @@ class Pictures extends Model
         return $pictureId;
     }
 
+    public static function saveMultiplePictures($files, $newsId)
+    {
+        foreach ($files as $file) {
+            $pictureId = self::savePicture($file, $newsId);
+        }
+    }
+
     private static function checkFile($file)
     {
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
