@@ -1,7 +1,6 @@
 <?php
 $this->Title = 'Додавання новини';
-if(\core\Core::get()->session->get('user')->role !== "admin" && \core\Core::get()->session->get('user')->role !== "moderator")
-    \core\Core::get()->controllerObject->redirect('/layouts/error');
+
 ?>
 
 </head>

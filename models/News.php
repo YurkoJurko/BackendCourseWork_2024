@@ -13,40 +13,67 @@ use core\Model;
  * @property string $date ;
  * @property int $likes ;
  * @property int $isVisible ;
+ * @property int $postedBy ;
  */
 class News extends Model
 {
     public static $tableName = 'news';
 
-
-    public static function getAllNews($limit, $offset, $where = null)
+    public static function getAllNews($limit, $offset, $includeButtons, $where = null)
     {
         $db = Core::get()->db;
         $news = $db->select(static::$tableName, "*", $where, $limit, $offset);
 
         $html = '';
         foreach ($news as $item) {
-            $html .= "<div class='card mb-3'>";
+
+            $html .= "<div class='card mb-3 p-3'>";
+
+
+            $html .= "<a href='/news/view/{$item['id']}' class='news-link'>";
             $html .= "<div class='card-body'>";
             $html .= "<h2 class='card-title'>{$item['title']}</h2>";
             $html .= "<p class='card-text'>{$item['shortText']}</p>";
             $html .= "<p class='card-text'><small class='text-muted'>{$item['date']}</small></p>";
             $html .= "</div>";
+            $html .= "</a>";
+
+            if ($includeButtons) {
+                $html .= "<div class='buttons-container'>";
+                $html .= "<a href='/news/edit/{$item['id']}' ><button type='button' class='btn btn-primary edit-button m-1'>Edit</button></a>";
+                $html .= "<a href='/news/submit/{$item['id']}' ><button type='button' class='btn btn-success submit-button m-1'>Submit</button></a>";
+                $html .= "</div>";
+            }
             $html .= "</div>";
         }
-
 
         return $html;
     }
 
-    public static function getUnapprovedNews()
+    public static function generatePagination($currentPage, $totalPages, $href)
     {
-        $db = Core::get()->db;
-        return $db->select(static::$tableName, "*", ["isVisible" => 0]);
+        $pagination = '';
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $activeClass = ($currentPage == $i) ? 'active' : '';
+            $pagination .= "<li class='page-item {$activeClass}'><a class='page-link' href='/{$href}{$i}'>{$i}</a></li>";
+        }
+        return $pagination;
     }
-    public static function countAllNews()
+
+    public static function updateNewsFields($id, $fields)
     {
+        if (!is_array($fields) || empty($fields)) {
+            throw new \Exception("Fields parameter must be a non-empty associative array.");
+        }
+
+        if (!isset($id) || empty($id)) {
+            throw new \Exception("News ID is required.");
+        }
+
         $db = Core::get()->db;
-        return $db->count(static::$tableName);
+        $where = ['id' => $id];
+        $result = $db->update(static::$tableName, $fields, $where);
+
+        return $result;
     }
 }

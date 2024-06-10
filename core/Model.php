@@ -16,11 +16,8 @@ class Model
     public function save()
     {
         $temp = $this->{static::$primaryKey};
-        if (!isset($this->{static::$primaryKey}) || empty($temp)) {
+        if (!isset($this->{static::$primaryKey}) || empty($temp))
             Core::get()->db->insert(static::$tableName, $this->fieldsArray);
-        } else {
-            Core::get()->db->update(static::$tableName, $this->fieldsArray, [static::$primaryKey => $this->{static::$primaryKey}]);
-        }
     }
 
     public static function deleteById($id)
