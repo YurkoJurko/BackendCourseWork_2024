@@ -30,6 +30,13 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
             background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1));
             background: linear-gradient(to right, rgba(251, 194, 235, 1), rgba(166, 193, 238, 1))
         }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            z-index: 1;
+        }
     </style>
 </head>
 
@@ -41,14 +48,15 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
             <div class="col col-lg-9 col-xl-8">
                 <div class="card">
                     <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                            <?= \models\Users::outputProfilePicture($user) . " class='img-fluid img-thumbnail mt-4 mb-2' style='width: 150px; z-index: 1'" ?>
+                        <div class="ms-4 mt-5 d-flex flex-column align-items-center" style="width: 150px; height: 150px">
+                            <?= \models\Users::outputProfilePicture($user) . " class='img-fluid img-thumbnail mt-4 mb-2 profile-picture'" ?>
                             <br>
-                            <?php if($userID === \core\Core::get()->session->get('user')->id):?>
-                            <a href="/users/edit" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark"
-                               style="z-index: 1;">
-                                Edit profile
-                            </a>
+                            <?php if ($userID == \core\Core::get()->session->get('user')->id): ?>
+                                <a href="/users/edit" class="btn btn-outline-dark text-body position-absolute top-50"
+                                   data-mdb-ripple-color="dark"
+                                   style="z-index: 2;">
+                                    Edit profile
+                                </a>
                             <?php endif; ?>
                         </div>
                         <div class="ms-3" style="margin-top: 130px;">
@@ -73,11 +81,11 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
                             <!-- Add your recent comments section content here -->
                         </div>
                         <?php if ($user['role'] === 'admin' || $user['role'] === 'moderator'): ?>
-                        <div class="d-flex justify-content-between align-items-center mb-4 text-body">
-                            <p class="lead fw-normal mb-0">Recent news</p>
-                            <!-- Add your recent news section content here -->
-                            <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
-                        </div>
+                            <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+                                <p class="lead fw-normal mb-0">Recent news</p>
+                                <!-- Add your recent news section content here -->
+                                <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>

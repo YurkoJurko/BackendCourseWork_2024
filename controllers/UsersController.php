@@ -145,9 +145,6 @@ class UsersController extends Controller
 
     public function actionView()
     {
-        if(is_null(Users::findByID(Core::get()->additionalParam))){
-            $this->actionIndex();
-        }
         return $this->render();
     }
 }

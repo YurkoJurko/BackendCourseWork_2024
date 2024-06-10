@@ -28,20 +28,20 @@ class Database
                 $params = array_merge($params, $where);
             }
 
-            if ($limit) {
+            if ($limit !== null) {
                 $sql .= " LIMIT :limit";
                 $params['limit'] = (int)$limit;
             }
 
-            if ($offset) {
+            if ($offset !== null) {
                 $sql .= " OFFSET :offset";
                 $params['offset'] = (int)$offset;
             }
 
             $sth = $this->pdo->prepare($sql);
 
-            foreach ($params as $key => $value) {
-                $sth->bindValue(":{$key}", $value);
+            foreach ($params as $key => &$value) {
+                $sth->bindParam(":{$key}", $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
             }
 
             $sth->execute();
@@ -50,6 +50,8 @@ class Database
             throw new \Exception("Database Query Error: " . $e->getMessage());
         }
     }
+
+
 
     public function insert($table, $data)
     {
@@ -77,7 +79,9 @@ class Database
     public function update($table, $data, $where)
     {
         try {
-            $fieldsList = implode(", ", array_map(function($key) { return "{$key} = :{$key}"; }, array_keys($data)));
+            $fieldsList = implode(", ", array_map(function ($key) {
+                return "{$key} = :{$key}";
+            }, array_keys($data)));
             $sql = "UPDATE {$table} SET {$fieldsList}";
 
             $params = array_merge($data, $where);
@@ -144,7 +148,7 @@ class Database
             }
 
             $sth->execute();
-            return (int) $sth->fetchColumn();
+            return (int)$sth->fetchColumn();
         } catch (\PDOException $e) {
             throw new \Exception("Database Query Error: " . $e->getMessage());
         }

@@ -85,4 +85,25 @@ class Pictures extends Model
         return $mimeTypeMap[$mimeType] ?? null;
     }
 
+    public static function separateFiles($files)
+    {
+        $numFiles = count($files['name']);
+        $separatedFiles = array();
+
+        for ($i = 0; $i < $numFiles; $i++) {
+            $file = array(
+                'name' => $files['name'][$i],
+                'full_path' => $files['full_path'][$i],
+                'type' => $files['type'][$i],
+                'tmp_name' => $files['tmp_name'][$i],
+                'error' => $files['error'][$i],
+                'size' => $files['size'][$i]
+            );
+
+            $separatedFiles[] = $file;
+        }
+
+        return $separatedFiles;
+    }
+
 }

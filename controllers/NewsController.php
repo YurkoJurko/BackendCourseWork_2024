@@ -39,7 +39,7 @@ class NewsController extends Controller
             $filesArray = $this->files->pictures;
 
             if (!empty($filesArray)) {
-                $files = $this->separateFiles($filesArray);
+                $files = Pictures::separateFiles($filesArray);
                 Pictures::saveMultiplePictures($files, $newsId);
             }
             $this->redirect('/news/view/' . $newsId);
@@ -62,24 +62,6 @@ class NewsController extends Controller
     }
 
 
-    function separateFiles($files) {
-        $numFiles = count($files['name']);
-        $separatedFiles = array();
 
-        for ($i = 0; $i < $numFiles; $i++) {
-            $file = array(
-                'name' => $files['name'][$i],
-                'full_path' => $files['full_path'][$i],
-                'type' => $files['type'][$i],
-                'tmp_name' => $files['tmp_name'][$i],
-                'error' => $files['error'][$i],
-                'size' => $files['size'][$i]
-            );
-
-            $separatedFiles[] = $file;
-        }
-
-        return $separatedFiles;
-    }
 
 }
