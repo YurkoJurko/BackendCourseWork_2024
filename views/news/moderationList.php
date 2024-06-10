@@ -9,7 +9,7 @@ $totalNews = \core\Core::get()->db->count('news', ['isVisible' => 0]);
 
 $totalPages = ceil($totalNews / $limit);
 
-$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', 'DESC');
+$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', \core\Core::get()->additionalParam);
 ?>
 
 <style>
@@ -21,6 +21,16 @@ $news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'dat
 
 <div class="container mt-5">
     <h1 class="mb-4">Підтверження/Редактура новин</h1>
+    <div>
+        <div class="col-md-8 d-flex flex-row">
+            <div class="mb-3">
+                <a href="/news/moderationList/ASC" class="btn btn-primary m-1">Показувати запити від найстаріших</a>
+            </div>
+            <div>
+                <a href="/news/moderationList/DESC" class="btn btn-primary m-1">Показувати запити від найшовіших</a>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8" id="newsList">
             <?php echo $news; ?>

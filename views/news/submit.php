@@ -1,6 +1,6 @@
 <?php
 if (\core\Core::get()->session->get('user')->role === 'moderator') {
-    $news = \models\News::updateNewsFields(\core\Core::get()->additionalParam, ['isVisible' => 1]);
+    $news = \models\News::updateNewsFields(\core\Core::get()->additionalParam, ['isVisible' => 1, 'date' => date('Y-m-d H:i:s')]);
     if (!empty($news)) {
         echo "<div class='alert alert-success' role='alert'>";
         echo "<strong>Новину успішно узгоджено!</strong><br>Скоро Вас напрявлять на головну сторінку.";
