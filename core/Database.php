@@ -15,7 +15,7 @@ class Database
         $this->pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
     }
 
-    public function select($table, $fields = "*", $where = null, $limit = null, $offset = null)
+    public function select($table, $fields = "*", $where = null, $limit = null, $offset = null, $orderBy = null, $orderDirection = null)
     {
         try {
             $fields_string = $this->fieldsImplode($fields);
@@ -26,6 +26,10 @@ class Database
                 $where_string = $this->where($where);
                 $sql .= " WHERE {$where_string}";
                 $params = array_merge($params, $where);
+            }
+
+            if ($orderBy !== null && $orderDirection !== null) {
+                $sql .= " ORDER BY {$orderBy} {$orderDirection}";
             }
 
             if ($limit !== null) {

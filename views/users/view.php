@@ -55,7 +55,7 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
                                 <a href="/users/edit" class="btn btn-outline-dark text-body position-absolute top-50"
                                    data-mdb-ripple-color="dark"
                                    style="z-index: 2;">
-                                    Edit profile
+                                    Редагувати профіль
                                 </a>
                             <?php endif; ?>
                         </div>

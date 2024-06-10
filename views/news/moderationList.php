@@ -9,7 +9,7 @@ $totalNews = \core\Core::get()->db->count('news', ['isVisible' => 0]);
 
 $totalPages = ceil($totalNews / $limit);
 
-$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0]);
+$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', 'DESC');
 ?>
 
 <style>

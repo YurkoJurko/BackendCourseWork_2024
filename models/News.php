@@ -19,16 +19,15 @@ class News extends Model
 {
     public static $tableName = 'news';
 
-    public static function getAllNews($limit, $offset, $includeButtons, $where = null)
+    public static function getAllNews($limit, $offset, $includeButtons, $where = null, $orderBy = null, $orderDirection = null)
     {
         $db = Core::get()->db;
-        $news = $db->select(static::$tableName, "*", $where, $limit, $offset);
+        $news = $db->select(static::$tableName, "*", $where, $limit, $offset, $orderBy, $orderDirection);
 
         $html = '';
         foreach ($news as $item) {
 
             $html .= "<div class='card mb-3 p-3'>";
-
 
             $html .= "<a href='/news/view/{$item['id']}' class='news-link'>";
             $html .= "<div class='card-body'>";
@@ -40,8 +39,8 @@ class News extends Model
 
             if ($includeButtons) {
                 $html .= "<div class='buttons-container'>";
-                $html .= "<a href='/news/edit/{$item['id']}' ><button type='button' class='btn btn-primary edit-button m-1'>Edit</button></a>";
-                $html .= "<a href='/news/submit/{$item['id']}' ><button type='button' class='btn btn-success submit-button m-1'>Submit</button></a>";
+                $html .= "<a href='/news/edit/{$item['id']}' ><button type='button' class='btn btn-primary edit-button m-1'>Змінити</button></a>";
+                $html .= "<a href='/news/submit/{$item['id']}' ><button type='button' class='btn btn-success submit-button m-1'>Узгодити</button></a>";
                 $html .= "</div>";
             }
             $html .= "</div>";

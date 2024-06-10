@@ -35,10 +35,31 @@ $news = \models\News::findByID(\core\Core::get()->additionalParam);
                 <label for="shortText" class="form-label">Короткий текст для відображення в пошуку</label>
                 <textarea class="form-control" id="shortText" name="shortText" rows="2"><?= $news['shortText'] ?></textarea>
             </div>
-
+            <div class="mb-3">
+                <label for="pictures" class="form-label">Зображення</label>
+                <div id="fileInputs">
+                    <input type="file" class="form-control mb-2" name="pictures[]" accept="image/*" onchange="addFileInput(this)">
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary">Зберегти зміни</button>
         </form>
     </div>
 </div>
+<script>
+    function addFileInput(input) {
+        if (input.files.length > 0) {
+            const fileInputsDiv = document.getElementById('fileInputs');
+            const newFileInput = document.createElement('input');
+            newFileInput.type = 'file';
+            newFileInput.name = 'pictures[]';
+            newFileInput.classList.add('form-control', 'mb-2');
+            newFileInput.accept = 'image/*';
+            newFileInput.onchange = function () {
+                addFileInput(newFileInput);
+            };
+            fileInputsDiv.appendChild(newFileInput);
+        }
+    }
+</script>
 </body>
 </html>

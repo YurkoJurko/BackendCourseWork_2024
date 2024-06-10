@@ -10,12 +10,12 @@ class RequestMethod
     {
         $this->array = $array;
     }
+
     public function __get($key)
     {
-        if(isset($this->array[$key])){
+        if (isset($this->array[$key])) {
             return $this->array[$key];
-        }
-        else{
+        } else {
             return null;
         }
     }

@@ -18,25 +18,17 @@ class NewsController extends Controller
         else {
             $db = Core::get()->db;
             if ($this->isPost) {
-                $this->clearErrorMessages();
                 $user = Core::get()->session->get('user');
-
-                $title = $this->post->title;
-                $text = $this->post->text;
-                $shortText = $this->post->shortText ?? '';
-                $date = date('Y-m-d H:i:s');
-                $likes = 0;
-                $isVisible = 0;
-                $postedBy = $user->id;
+                $post = $this->post;
 
                 $newsData = [
-                    'title' => $title,
-                    'text' => $text,
-                    'shortText' => $shortText,
-                    'date' => $date,
-                    'likes' => $likes,
-                    'isVisible' => $isVisible,
-                    'postedBy' => $postedBy,
+                    'title' => $post->title,
+                    'text' => $post->text,
+                    'shortText' => $post->shortText,
+                    'date' => date('Y-m-d H:i:s'),
+                    'likes' => 0,
+                    'isVisible' => 0,
+                    'postedBy' => $user->id,
                 ];
                 $newsId = $db->insert('news', $newsData);
                 $filesArray = $this->files->pictures;
@@ -61,10 +53,34 @@ class NewsController extends Controller
 
     public function actionEdit()
     {
-        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin')
-            return $this->render();
-        else return $this->redirect('/layouts/error');
+        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin') {
+            if ($this->isPost) {
+                $post = $this->post;
+
+                $newsId = \core\Core::get()->additionalParam;
+
+                $fields = [
+                    'title' => $post->title,
+                    'text' => $post->text,
+                    'shortText' => $post->shortText
+                ];
+                \models\News::updateNewsFields($newsId, $fields);
+                Pictures::deleteByCondition(['newsId' => $newsId]);
+                $filesArray = $this->files->pictures;
+
+                if (!empty($filesArray)) {
+                    $files = Pictures::separateFiles($filesArray);
+                    Pictures::saveMultiplePictures($files, $newsId);
+                }
+                return $this->redirect('/news/moderationList/');
+            } else {
+                return $this->render();
+            }
+        } else {
+            return $this->redirect('/layouts/error');
+        }
     }
+
 
     public function actionSubmit()
     {
