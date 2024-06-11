@@ -12,6 +12,7 @@ $totalPages = ceil($totalNews / $limit);
 $additionalParam = \core\Core::get()->additionalParam ?? 'DESC';
 
 $news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', $additionalParam);
+
 ?>
 
 <style>
@@ -20,7 +21,6 @@ $news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'dat
         color: inherit;
     }
 </style>
-
 <div class="container mt-5">
     <h1 class="mb-4">Підтверження/Редактура новин</h1>
     <div>

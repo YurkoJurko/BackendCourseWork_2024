@@ -87,7 +87,7 @@ class NewsController extends Controller
     {
         if (\core\Core::get()->session->get('user')->role === 'moderator')
             return $this->render();
-        else $this->redirect('/layouts/error');
+        // else $this->redirect('/layouts/error');
     }
 
     public function actionIndex()
@@ -97,7 +97,23 @@ class NewsController extends Controller
 
     public function actionView()
     {
-        return $this->render();
+        $news = News::findByID(Core::get()->additionalParam);
+        if (!is_null($news) && $news['isVisible'] == 1) {
+            if ($this->isPost) {
+
+                $commentText = $this->post->commentText;
+                $userId = \core\Core::get()->session->get('user')->id;
+
+                $commentData = [
+                    'userID' => $userId,
+                    'text' => $commentText,
+                    'date' => date('Y-m-d H:i:s'),
+                    'newsId' => Core::get()->additionalParam
+                ];
+                \models\Comments::saveComment($commentData);
+                return $this->render();
+            } else return $this->render();
+        } else return $this->redirect('/layouts/error');
     }
 
 

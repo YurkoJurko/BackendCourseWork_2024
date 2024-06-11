@@ -24,12 +24,14 @@ class Router
 
         \core\Core::get()->moduleName = $parts[0];
         \core\Core::get()->actionName = $parts[1];
-        if (isset($parts[2])) {
-            \core\Core::get()->additionalParam = $parts[2];
-        }
-        if (isset($parts[3])) {
-            \core\Core::get()->paginationParam = $parts[3];
-        }
+            if (isset($parts[2])) {
+                if ($parts[2] === 'DESC' || $parts[2] == 'ASC' || $parts[0] === 'users' || ($parts[0] === 'news' && ($parts[1] === 'view' || $parts[1] === 'submit' || $parts[1] === 'edit')))
+                    \core\Core::get()->additionalParam = $parts[2];
+                else \core\Core::get()->additionalParam = 'DESC';
+            }
+            if (isset($parts[3])) {
+                \core\Core::get()->paginationParam = $parts[3];
+            }
         $controller = 'controllers\\' . ucfirst($parts[0]) . 'Controller';
         $method = 'action' . ucfirst($parts[1]);
 
