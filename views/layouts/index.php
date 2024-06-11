@@ -55,6 +55,9 @@ if(\core\Core::get()->controllerObject->isPost){
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                         <li><a href="/news/moderationList" class="nav-link px-2 link-secondary">Черга новин</a></li>
                     </ul>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li><a href="/site/promotePage" class="nav-link px-2 link-secondary">Керування користувачами</a></li>
+                    </ul>
                 <?php endif; ?>
 
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="/site/search/" method="post" role="search">

@@ -22,7 +22,6 @@ $user = \core\Core::get()->session->get('user');
         <?php endif; ?>
         <h2>Edit User</h2>
         <div class="p-5">
-            <!-- Form for username, login, and profile picture -->
             <form method="post" action="" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="update_profile">
 
@@ -48,7 +47,6 @@ $user = \core\Core::get()->session->get('user');
         </div>
 
         <div class="p-5">
-            <!-- Form for password change -->
             <form method="post" action="">
                 <input type="hidden" name="action" value="change_password">
 

@@ -96,13 +96,19 @@ class Users extends Model
         Core::get()->session->remove('user');
     }
 
+    public static function deleteUserById($userId)
+    {
+        self::deleteById($userId);
+    }
+
     public static function updateUser($user)
     {
         Core::get()->db->update('users', [
-            'username' => $user->username,
-            'login' => $user->login,
-            'profilePictureID' => $user->profilePictureID,
-            'password' => $user->password
-        ], ['id' => $user->id]);
+            'username' => $user['username'],
+            'login' => $user['login'],
+            'profilePictureID' => $user['profilePictureID'],
+            'password' => $user['password'],
+            'role' => $user['role']
+        ], ['id' => $user['id']]);
     }
 }
