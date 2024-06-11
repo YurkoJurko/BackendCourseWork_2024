@@ -10,6 +10,8 @@ if (is_null(\core\Core::get()->additionalParam)) {
     $user = \models\Users::findByID($userID);
 }
 
+$this->Title = 'Профіль ' . $user['username'];
+
 $commentCount = \core\Core::get()->db->count('comments', ['userID' => $userID]);
 $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
 ?>

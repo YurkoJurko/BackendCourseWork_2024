@@ -1,12 +1,10 @@
 <?php
-$this->Title = 'news view';
-
 $newsId = \core\Core::get()->additionalParam;
 
 $news = \models\News::findByID($newsId);
+$this->Title = $news['title'];
 $author = \models\Users::findByID($news['postedBy']);
 $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
-
 ?>
 <div class="container mt-5">
     <div class="news-details">
@@ -14,14 +12,13 @@ $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
         <p><?= $news['shortText'] ?></p>
     </div>
 
-    <div class="w-75 align-content-center mt-5">
-        <div id="carouselExampleControls" class="carousel slide" data-mdb-ride="carousel" data-mdb-carousel-init>
+    <div class="w-50 align-content-center mt-5">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <?php if (!empty($pictures)): ?>
                     <?php foreach ($pictures as $index => $picture): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <img src="data:image/jpeg;base64,<?= base64_encode($picture['picture']) ?>"
-                                 class="d-block w-100" alt="Image <?= $index + 1 ?>"/>
+                            <img src="data:image/jpeg;base64,<?= base64_encode($picture['picture']) ?>" class="d-block w-100" alt="Image <?= $index + 1 ?>"/>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -30,27 +27,33 @@ $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
                     </div>
                 <?php endif; ?>
             </div>
-            <button class="carousel-control-prev" type="button" data-mdb-target="#carouselExampleControls"
-                    data-mdb-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-mdb-target="#carouselExampleControls"
-                    data-mdb-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
     </div>
 
-
     <div class="news-details">
-
         <p><h3><?= $news['text'] ?></h3></p>
         <p><strong>Новина від:</strong> <?= $news['date'] ?></p>
         <p><strong>Автор:</strong> <?= $author['username'] ?></p>
     </div>
 
+    <?php if (\core\Core::get()->session->get('user')->role === "admin" || \core\Core::get()->session->get('user')->role === "moderator") : ?>
+        <a href='/news/edit/<?= $news['id'] ?>'>
+            <button type='button' class='btn btn-primary edit-button m-1'>Змінити</button>
+        </a>
+        <?php if ($news['isVisible'] === 0) : ?>
+            <a href='/news/submit/<?= $news['id'] ?>'>
+                <button type='button' class='btn btn-success submit-button m-1'>Узгодити</button>
+            </a>
+        <?php endif; ?>
+    <?php endif; ?>
     <div class="mt-5">
         <h3>Коментарі</h3>
         <form action="" method="post">
@@ -62,7 +65,7 @@ $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
         </form>
 
         <div class="comments mt-4">
-                <?php echo \models\Comments::getCommentHtmlByNewsId($newsId)?>
+            <?= \models\Comments::getCommentHtmlByNewsId($newsId) ?>
         </div>
     </div>
 </div>

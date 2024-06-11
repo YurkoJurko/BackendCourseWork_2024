@@ -72,4 +72,34 @@ class News extends Model
 
         return $result;
     }
+
+    public static function searchNewsByTitle($title)
+    {
+        $db = Core::get()->db;
+        $sql = "
+        SELECT *
+        FROM news
+        WHERE title LIKE :title AND isVisible = 1
+        ORDER BY date DESC
+    ";
+        $sth = $db->pdo->prepare($sql);
+        $sth->bindValue(':title', '%' . $title . '%', \PDO::PARAM_STR);
+        $sth->execute();
+
+        $html = '';
+        foreach ($sth->fetchAll() as $item) {
+            $html .= "<div class='card mb-3 p-3'>";
+            $html .= "<a href='/news/view/{$item['id']}' class='news-link'>";
+            $html .= "<div class='card-body'>";
+            $html .= "<h2 class='card-title'>{$item['title']}</h2>";
+            $html .= "<p class='card-text'>{$item['shortText']}</p>";
+            $html .= "<p class='card-text'><small class='text-muted'>{$item['date']}</small></p>";
+            $html .= "</div>";
+            $html .= "</a>";
+            $html .= "</div>";
+        }
+
+        return $html;
+    }
+
 }

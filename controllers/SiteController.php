@@ -13,4 +13,9 @@ class SiteController extends Controller
     {
         return $this->render();
     }
+
+    public function actionSearch()
+    {
+        return $this->render();
+    }
 }

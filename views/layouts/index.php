@@ -18,6 +18,8 @@ else
 
 $loginState = \models\Users::isUserLogged();
 
+if(\core\Core::get()->controllerObject->isPost){
+}
 
 ?>
 
@@ -55,9 +57,9 @@ $loginState = \models\Users::isUserLogged();
                     </ul>
                 <?php endif; ?>
 
-                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="/site/search/" method="post" role="search">
                     <div class="d-flex">
-                        <input type="search" class="form-control me-2" placeholder="Пошук..." aria-label="Search">
+                        <input type="search" name="searchQuery" class="form-control me-2" placeholder="Пошук..." aria-label="Search">
                         <button type="submit" class="btn btn-primary">Пошук</button>
                     </div>
                 </form>

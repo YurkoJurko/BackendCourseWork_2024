@@ -14,9 +14,9 @@ class NewsController extends Controller
 {
     public function actionAdd()
     {
-        if (\core\Core::get()->session->get('user')->role !== "admin" && \core\Core::get()->session->get('user')->role !== "moderator")
+        if (\core\Core::get()->session->get('user')->role !== "admin" && \core\Core::get()->session->get('user')->role !== "moderator") {
             \core\Core::get()->controllerObject->redirect('/layouts/error');
-        else {
+        } else {
             $db = Core::get()->db;
             if ($this->isPost) {
                 $user = Core::get()->session->get('user');
@@ -37,7 +37,7 @@ class NewsController extends Controller
                     $files = Pictures::separateFiles($filesArray);
                     Pictures::saveMultiplePictures($files, $newsId);
                 }
-                $this->redirect('/news/view/' . $newsId);
+                $this->redirect("/news/view/{$newsId}");
             } else {
                 return $this->render();
             }
@@ -73,7 +73,7 @@ class NewsController extends Controller
                     $files = Pictures::separateFiles($filesArray);
                     Pictures::saveMultiplePictures($files, $newsId);
                 }
-                return $this->redirect('/news/moderationList/');
+                return $this->redirect("/news/view/{$newsId}");
             } else {
                 return $this->render();
             }
@@ -98,7 +98,7 @@ class NewsController extends Controller
     public function actionView()
     {
         $news = News::findByID(Core::get()->additionalParam);
-        if (!is_null($news) && $news['isVisible'] == 1) {
+        if (!is_null($news) && ($news['isVisible'] == 1 || ($news['isVisible'] == 0 && (Core::get()->session->get('user')->role === 'moderator' || Core::get()->session->get('user')->role === 'admin' )))) {
             if ($this->isPost) {
                 $db = Core::get()->db;
                 $commentText = $this->post->commentText;
