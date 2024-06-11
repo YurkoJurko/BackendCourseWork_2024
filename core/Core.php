@@ -11,6 +11,7 @@ class Core
     public $template;
     public $db;
     public $additionalParam;
+    public $paginationParam;
     public Controller $controllerObject;
     private static $instance;
     public $session;

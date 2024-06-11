@@ -1,7 +1,7 @@
 <?php
 $this->Title = 'Сторінка модерації';
 
-$page = \core\Core::get()->additionalParam ? max(1, intval(\core\Core::get()->additionalParam)) : 1;
+$page = \core\Core::get()->paginationParam ? max(1, intval(\core\Core::get()->paginationParam)) : 1;
 $limit = 10;
 $offset = ($page - 1) * $limit;
 
@@ -9,7 +9,9 @@ $totalNews = \core\Core::get()->db->count('news', ['isVisible' => 0]);
 
 $totalPages = ceil($totalNews / $limit);
 
-$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', \core\Core::get()->additionalParam);
+$additionalParam = \core\Core::get()->additionalParam ?? 'DESC';
+
+$news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'date', $additionalParam);
 ?>
 
 <style>
@@ -44,18 +46,22 @@ $news = \models\News::getAllNews($limit, $offset, true, ['isVisible' => 0], 'dat
             <ul class="pagination justify-content-center">
                 <?php if ($page > 1): ?>
                     <li class="page-item">
-                        <a class="page-link" href="/news/moderationList/<?php echo $page - 1; ?>" aria-label="Previous">
+                        <a class="page-link"
+                           href="/news/moderationList/<?= $additionalParam ?>/<?php echo $page - 1; ?>"
+                           aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
                 <?php endif; ?>
 
-                <?php echo \models\News::generatePagination($page, $totalPages, '/oss/news/moderationList/'); ?>
+                <?php echo \models\News::generatePagination($page, $totalPages, 'news/moderationList/' . $additionalParam . '/'); ?>
 
                 <?php if ($page < $totalPages): ?>
                     <li class="page-item">
-                        <a class="page-link" href="/news/moderationList/<?php echo $page + 1; ?>" aria-label="Next">
+                        <a class="page-link"
+                           href="/news/moderationList/<?= $additionalParam ?>/<?php echo $page + 1; ?>"
+                           aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>

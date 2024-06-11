@@ -26,9 +26,7 @@ class News extends Model
 
         $html = '';
         foreach ($news as $item) {
-
             $html .= "<div class='card mb-3 p-3'>";
-
             $html .= "<a href='/news/view/{$item['id']}' class='news-link'>";
             $html .= "<div class='card-body'>";
             $html .= "<h2 class='card-title'>{$item['title']}</h2>";
@@ -54,7 +52,7 @@ class News extends Model
         $pagination = '';
         for ($i = 1; $i <= $totalPages; $i++) {
             $activeClass = ($currentPage == $i) ? 'active' : '';
-            $pagination .= "<li class='page-item {$activeClass}'><a class='page-link' href='/{$href}{$i}'>{$i}</a></li>";
+            $pagination .= "<li class='page-item {$activeClass}'><a class='page-link' href='/$href{$i}'>{$i}</a></li>";
         }
         return $pagination;
     }

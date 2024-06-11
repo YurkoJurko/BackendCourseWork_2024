@@ -17,42 +17,38 @@ class Database
 
     public function select($table, $fields = "*", $where = null, $limit = null, $offset = null, $orderBy = null, $orderDirection = null)
     {
-        try {
-            $fields_string = $this->fieldsImplode($fields);
-            $sql = "SELECT {$fields_string} FROM {$table}";
-            $params = [];
+        $fields_string = $this->fieldsImplode($fields);
+        $sql = "SELECT {$fields_string} FROM {$table}";
+        $params = [];
 
-            if ($where) {
-                $where_string = $this->where($where);
-                $sql .= " WHERE {$where_string}";
-                $params = array_merge($params, $where);
-            }
-
-            if ($orderBy !== null && $orderDirection !== null) {
-                $sql .= " ORDER BY {$orderBy} {$orderDirection}";
-            }
-
-            if ($limit !== null) {
-                $sql .= " LIMIT :limit";
-                $params['limit'] = (int)$limit;
-            }
-
-            if ($offset !== null) {
-                $sql .= " OFFSET :offset";
-                $params['offset'] = (int)$offset;
-            }
-
-            $sth = $this->pdo->prepare($sql);
-
-            foreach ($params as $key => &$value) {
-                $sth->bindParam(":{$key}", $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-            }
-
-            $sth->execute();
-            return $sth->fetchAll();
-        } catch (\PDOException $e) {
-            throw new \Exception("Database Query Error: " . $e->getMessage());
+        if ($where) {
+            $where_string = $this->where($where);
+            $sql .= " WHERE {$where_string}";
+            $params = array_merge($params, $where);
         }
+
+        if ($orderBy !== null && $orderDirection !== null) {
+            $sql .= " ORDER BY {$orderBy} {$orderDirection}";
+        }
+
+        if ($limit !== null) {
+            $sql .= " LIMIT :limit";
+            $params['limit'] = (int)$limit;
+        }
+
+        if ($offset !== null) {
+            $sql .= " OFFSET :offset";
+            $params['offset'] = (int)$offset;
+        }
+
+        $sth = $this->pdo->prepare($sql);
+
+        foreach ($params as $key => &$value) {
+            $sth->bindParam(":{$key}", $value, is_int($value) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+        }
+
+        $sth->execute();
+        return $sth->fetchAll();
     }
 
 

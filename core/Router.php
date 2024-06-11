@@ -27,6 +27,9 @@ class Router
         if (isset($parts[2])) {
             \core\Core::get()->additionalParam = $parts[2];
         }
+        if (isset($parts[3])) {
+            \core\Core::get()->paginationParam = $parts[3];
+        }
         $controller = 'controllers\\' . ucfirst($parts[0]) . 'Controller';
         $method = 'action' . ucfirst($parts[1]);
 
