@@ -118,7 +118,11 @@ class NewsController extends Controller
 
     public function actionDeleteComment()
     {
-        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin') {
+        $commentID = Core::get()->additionalParam;
+        $comment = Comments::findByID($commentID);
+        $currentUserID = \core\Core::get()->session->get('user')->id;
+        $currentUserRole = \core\Core::get()->session->get('user')->role;
+        if (!is_null($comment) && ($comment['userID'] === $currentUserID || $currentUserRole === 'moderator' || $currentUserRole === 'admin')) {
             return $this->render();
         } else {
             return $this->redirect('/layouts/error');

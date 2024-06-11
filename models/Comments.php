@@ -33,9 +33,11 @@ class Comments extends Model
                     $user = Users::findByID($userID);
                     if ($user) {
                         $username = $user['username'];
+                        $currentUserID = \core\Core::get()->session->get('user')->id;
+                        $currentUserRole = \core\Core::get()->session->get('user')->role;
 
                         $deleteButton = '';
-                        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin') {
+                        if ($currentUserID === $userID || $currentUserRole === 'moderator' || $currentUserRole === 'admin') {
                             $deleteButton = "<a href='/news/deleteComment/$commentID' class='btn btn-danger btn-sm'>Видалити коментар</a>";
                         }
 
