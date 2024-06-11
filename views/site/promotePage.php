@@ -6,15 +6,25 @@ use models\Users;
 $users = Users::findByCondition([]);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["deleteUser"])) {
-        $userId = $_POST["deleteUser"];
+    header('Content-Type: application/json');
+
+    $requestData = json_decode(file_get_contents('php://input'), true);
+
+    if (isset($requestData["deleteUser"])) {
+        $userId = $requestData["deleteUser"];
         Users::deleteById($userId);
-    } elseif (isset($_POST["saveUser"])) {
-        $userId = $_POST["saveUser"];
-        $role = $_POST["role"];
+        echo json_encode(['status' => 'success', 'message' => 'Користувача успішно видалено!']);
+        exit();
+    }
+
+    elseif (isset($requestData["saveUser"])) {
+        $userId = $requestData["saveUser"];
+        $role = $requestData["role"];
         $user = Users::findByID($userId);
         $user['role'] = $role;
         Users::updateUser($user);
+        echo json_encode(['status' => 'success', 'message' => 'Роль користувача успішно оновлено!']);
+        exit();
     }
 }
 ?>
@@ -51,9 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <td><?= $user['login'] ?></td>
                 <td><?= $user['email'] ?></td>
                 <td>
-                    <form method="POST" action="">
+                    <form id="form_<?= $user['id'] ?>" class="role-form" method="POST" action="">
                         <select class="form-select role-select" name="role">
-                            <option value="selected" <?= $user['role'] === '' ? 'selected' : '' ?>>Empty Role</option>
+                            <option value="" <?= $user['role'] === '' ? '' : 'selected' ?>>Без ролі</option>
                             <option value="moderator" <?= $user['role'] === 'moderator' ? 'selected' : '' ?>>Moderator</option>
                             <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
                         </select>
@@ -62,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </form>
                 </td>
                 <td>
-                    <form method="POST" action="">
+                    <form class="delete-form" method="POST" action="">
                         <input type="hidden" name="deleteUser" value="<?= $user['id'] ?>">
                         <button type="submit" class="btn btn-danger">Видалити</button>
                     </form>
@@ -73,24 +83,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </table>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('.save-btn').click(function () {
-            let row = $(this).closest('tr');
-            let userId = row.find('td:first').text();
-            let role = row.find('.role-select').val();
+        $('.role-form').submit(function (e) {
+            e.preventDefault();
+            let form = $(this);
+            let userId = form.find('input[name="saveUser"]').val();
+            let role = form.find('.role-select').val();
 
-            $.post('update_user_role.php', {
-                user_id: userId,
-                role: role
-            }, function (response) {
-                console.log(response);
+            $.ajax({
+                type: 'POST',
+                url: '',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    saveUser: userId,
+                    role: role
+                }),
+                success: function (response) {
+                    alert(response.message);
+                }
+            });
+        });
+
+        $('.delete-form').submit(function (e) {
+            e.preventDefault();
+            let form = $(this);
+            let userId = form.find('input[name="deleteUser"]').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    deleteUser: userId
+                }),
+                success: function (response) {
+                    alert(response.message);
+                    form.closest('tr').remove();
+                }
             });
         });
     });
 </script>
+
 </body>
+
 </html>
