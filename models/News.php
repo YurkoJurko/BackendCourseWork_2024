@@ -11,7 +11,6 @@ use core\Model;
  * @property string $text ;
  * @property string $shortText ;
  * @property string $date ;
- * @property int $likes ;
  * @property int $isVisible ;
  * @property int $postedBy ;
  */

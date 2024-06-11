@@ -1,9 +1,10 @@
 <?php
-if (\core\Core::get()->session->get('user')->role === 'moderator') {
-    $news = \models\News::updateNewsFields(\core\Core::get()->additionalParam, ['isVisible' => 1, 'date' => date('Y-m-d H:i:s')]);
-    if (!empty($news)) {
+if (!is_null(\core\Core::get()->additionalParam)) {
+    $commentID = \core\Core::get()->additionalParam;
+    if (!is_null(\models\Comments::findByID($commentID))) {
+        \models\Comments::deleteById($commentID);
         echo "<div class='alert alert-success' role='alert'>";
-        echo "<strong>Новину успішно узгоджено!</strong>";
+        echo "<strong>Коментар успішно видалено!</strong>";
         echo "</div>";
     }
 } else echo "виникла помилка у видаленні коментаря";
@@ -18,5 +19,7 @@ echo "</div>";
 <script>
     setTimeout(function () {
         window.location.href = "/site/index";
-    }, 5000);
+    }, 2500);
 </script>
+
+

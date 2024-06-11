@@ -4,6 +4,7 @@ namespace controllers;
 
 use core\Controller;
 use core\Core;
+use models\Comments;
 use models\News;
 use models\Pictures;
 use models\Users;
@@ -26,7 +27,6 @@ class NewsController extends Controller
                     'text' => $post->text,
                     'shortText' => $post->shortText,
                     'date' => date('Y-m-d H:i:s'),
-                    'likes' => 0,
                     'isVisible' => 0,
                     'postedBy' => $user->id,
                 ];
@@ -87,7 +87,7 @@ class NewsController extends Controller
     {
         if (\core\Core::get()->session->get('user')->role === 'moderator')
             return $this->render();
-        // else $this->redirect('/layouts/error');
+        else $this->redirect('/layouts/error');
     }
 
     public function actionIndex()
@@ -100,21 +100,29 @@ class NewsController extends Controller
         $news = News::findByID(Core::get()->additionalParam);
         if (!is_null($news) && $news['isVisible'] == 1) {
             if ($this->isPost) {
-
+                $db = Core::get()->db;
                 $commentText = $this->post->commentText;
-                $userId = \core\Core::get()->session->get('user')->id;
+                $userID = \core\Core::get()->session->get('user')->id;
 
                 $commentData = [
-                    'userID' => $userId,
+                    'userID' => $userID,
                     'text' => $commentText,
                     'date' => date('Y-m-d H:i:s'),
                     'newsId' => Core::get()->additionalParam
                 ];
-                \models\Comments::saveComment($commentData);
+                $db->insert('comments', $commentData);
                 return $this->render();
             } else return $this->render();
         } else return $this->redirect('/layouts/error');
     }
 
+    public function actionDeleteComment()
+    {
+        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin') {
+            return $this->render();
+        } else {
+            return $this->redirect('/layouts/error');
+        }
+    }
 
 }
