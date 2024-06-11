@@ -50,13 +50,14 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
             <div class="col col-lg-9 col-xl-8">
                 <div class="card">
                     <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                        <div class="ms-4 mt-5 d-flex flex-column align-items-center" style="width: 150px; height: 150px">
+                        <div class="ms-4 mt-5 d-flex flex-column align-items-center"
+                             style="width: 150px; height: 150px">
                             <?= \models\Users::outputProfilePicture($user) . " class='img-fluid img-thumbnail mt-4 mb-2 profile-picture'" ?>
                             <br>
                             <?php if ($userID == \core\Core::get()->session->get('user')->id): ?>
-                                <a href="/users/edit" class="btn btn-outline-dark text-body position-absolute top-50"
+                                <a href="/users/edit" class="btn btn-outline-dark text-body position-absolute bottom-0"
                                    data-mdb-ripple-color="dark"
-                                   style="z-index: 2;">
+                                   style="z-index: 2; margin-bottom: 5%">
                                     Редагувати профіль
                                 </a>
                             <?php endif; ?>
@@ -76,19 +77,6 @@ $newsCount = \core\Core::get()->db->count('news', ['postedBy' => $userID]);
                                 <p class="small text-muted mb-0">Новин викладено</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body p-4 text-black">
-                        <div class="mb-5 text-body">
-                            <p class="lead fw-normal mb-1">Recent comments</p>
-                            <!-- Add your recent comments section content here -->
-                        </div>
-                        <?php if ($user['role'] === 'admin' || $user['role'] === 'moderator'): ?>
-                            <div class="d-flex justify-content-between align-items-center mb-4 text-body">
-                                <p class="lead fw-normal mb-0">Recent news</p>
-                                <!-- Add your recent news section content here -->
-                                <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
-                            </div>
-                        <?php endif; ?>
                     </div>
                 </div>
             </div>

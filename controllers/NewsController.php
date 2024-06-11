@@ -98,7 +98,7 @@ class NewsController extends Controller
     public function actionView()
     {
         $news = News::findByID(Core::get()->additionalParam);
-        if (!is_null($news) && ($news['isVisible'] == 1 || ($news['isVisible'] == 0 && (Core::get()->session->get('user')->role === 'moderator' || Core::get()->session->get('user')->role === 'admin' )))) {
+        if (!is_null($news) && ($news['isVisible'] == 1 || ($news['isVisible'] == 0 && (Core::get()->session->get('user')->role === 'moderator' || Core::get()->session->get('user')->role === 'admin')))) {
             if ($this->isPost) {
                 $db = Core::get()->db;
                 $commentText = $this->post->commentText;
@@ -113,6 +113,13 @@ class NewsController extends Controller
                 $db->insert('comments', $commentData);
                 return $this->render();
             } else return $this->render();
+        } else return $this->redirect('/layouts/error');
+    }
+
+    public function actionDelete()
+    {
+        if (\core\Core::get()->session->get('user')->role === 'moderator' || \core\Core::get()->session->get('user')->role === 'admin') {
+            return $this->render();
         } else return $this->redirect('/layouts/error');
     }
 

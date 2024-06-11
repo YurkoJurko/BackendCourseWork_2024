@@ -48,6 +48,11 @@ $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
         <a href='/news/edit/<?= $news['id'] ?>'>
             <button type='button' class='btn btn-primary edit-button m-1'>Змінити</button>
         </a>
+    <br>
+        <a href='/news/delete/<?= $news['id'] ?>'>
+            <button type='button' class='btn btn-primary btn-danger m-1'>Видалити новину</button>
+        </a>
+    <br>
         <?php if ($news['isVisible'] === 0) : ?>
             <a href='/news/submit/<?= $news['id'] ?>'>
                 <button type='button' class='btn btn-success submit-button m-1'>Узгодити</button>
