@@ -103,12 +103,22 @@ class Users extends Model
 
     public static function updateUser($user)
     {
-        Core::get()->db->update('users', [
-            'username' => $user['username'],
-            'login' => $user['login'],
-            'profilePictureID' => $user['profilePictureID'],
-            'password' => $user['password'],
-            'role' => $user['role']
-        ], ['id' => $user['id']]);
+        if (is_array($user)) {
+            Core::get()->db->update('users', [
+                'username' => $user['username'],
+                'login' => $user['login'],
+                'profilePictureID' => $user['profilePictureID'],
+                'password' => $user['password'],
+                'role' => $user['role']
+            ], ['id' => $user['id']]);
+        }else{
+            Core::get()->db->update('users', [
+                'username' => $user->username,
+                'login' => $user->login,
+                'profilePictureID' => $user->profilePictureID,
+                'password' => $user->password,
+                'role' => $user->role
+            ], ['id' => $user->id]);
+        }
     }
 }
