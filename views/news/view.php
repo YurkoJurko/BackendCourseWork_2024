@@ -5,6 +5,7 @@ $news = \models\News::findByID($newsId);
 $this->Title = $news['title'];
 $author = \models\Users::findByID($news['postedBy']);
 $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
+$user = \core\Core::get()->session->get('user');
 ?>
 <div class="container mt-5">
     <div class="news-details">
@@ -44,30 +45,35 @@ $pictures = \models\Pictures::findByCondition(['newsId' => $newsId]);
         <p><strong>Автор:</strong> <?= $author['username'] ?></p>
     </div>
 
-    <?php if (\core\Core::get()->session->get('user')->role === "admin" || \core\Core::get()->session->get('user')->role === "moderator") : ?>
+    <?php if ($user && ($user->role === "admin" || $user->role === "moderator")) : ?>
         <a href='/news/edit/<?= $news['id'] ?>'>
             <button type='button' class='btn btn-primary edit-button m-1'>Змінити</button>
         </a>
-    <br>
+        <br>
         <a href='/news/delete/<?= $news['id'] ?>'>
             <button type='button' class='btn btn-primary btn-danger m-1'>Видалити новину</button>
         </a>
-    <br>
+        <br>
         <?php if ($news['isVisible'] === 0) : ?>
             <a href='/news/submit/<?= $news['id'] ?>'>
                 <button type='button' class='btn btn-success submit-button m-1'>Узгодити</button>
             </a>
         <?php endif; ?>
     <?php endif; ?>
+
     <div class="mt-5">
         <h3>Коментарі</h3>
-        <form action="" method="post">
-            <div class="mb-3">
-                <label for="commentText" class="form-label">Залиш коментар:</label>
-                <textarea class="form-control" id="commentText" name="commentText" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Надіслати коментар</button>
-        </form>
+        <?php if ($user): ?>
+            <form action="" method="post">
+                <div class="mb-3">
+                    <label for="commentText" class="form-label">Залиш коментар:</label>
+                    <textarea class="form-control" id="commentText" name="commentText" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Надіслати коментар</button>
+            </form>
+        <?php else: ?>
+            <p>Будь ласка, увійдіть, щоб залишити коментар.</p>
+        <?php endif; ?>
 
         <div class="comments mt-4">
             <?= \models\Comments::getCommentHtmlByNewsId($newsId) ?>

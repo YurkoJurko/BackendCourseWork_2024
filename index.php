@@ -15,6 +15,3 @@ $route = isset($_GET['route']) ? $_GET['route'] : '';
 $core = \core\Core::get();
 $core->run($route);
 $core->finish();
-
-
-
