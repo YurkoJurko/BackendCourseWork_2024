@@ -42,7 +42,7 @@ $user = \core\Core::get()->session->get('user');
     <div class="news-details">
         <p><h3><?= $news['text'] ?></h3></p>
         <p><strong>Новина від:</strong> <?= $news['date'] ?></p>
-        <p><strong>Автор:</strong> <?= $author['username'] ?></p>
+        <p><a href="/users/view/<?= $author['id'] ?>" ><strong>Автор:</strong> <?= $author['username'] ?></a></p>
     </div>
 
     <?php if ($user && ($user->role === "admin" || $user->role === "moderator")) : ?>
